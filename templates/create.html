@@ -1,0 +1,45 @@
+<script src="{{url_for('static', filename='constants.js')}}"></script>
+<script src="constants.js"></script>
+<script src="{{url_for('static',filename='jquery-3.6.0.min.js')}}"></script>
+<script src="jquery-3.6.0.min.js"></script>
+<script>
+  $(function () {
+    $('#res').css('opacity',0);
+    $('#form').on('submit',function(e){
+      e.preventDefault();
+      let name = $(this).find('[name=name]').val();
+      let startDate = $(this).find('[name=startDate]').val();
+      let interval = $(this).find('[name=interval]').val();
+      console.log('Form data: ' + name + ', ' + startDate + ', ' + interval);
+      console.log(!name || !startDate || !interval);
+      if(!name || !startDate || !interval) {
+        $('#res').html('Wprowadź poprawne dane.').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
+        return false;
+      }
+      habits[habits.length] = {name: name, startDate: startDate, interval: interval};
+      $('#res').html('Formularz przesłany!').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
+      return false;
+    });
+  });
+</script>
+
+<form action="" id="form">
+  <table>
+    <tr><td><label>
+      Nazwa zwyczaju<br/>
+      <input type="text" name="name" value="Np. Trening na siłowni"/>
+    </label></td></tr>
+    <tr><td><label>
+      Data rozpoczęcia<br/>
+      <input type="date" name="startDate"/>
+    </label></td></tr>
+    <tr><td><label>
+      Częstotliwość (co X dni)<br/>
+      <input type="number" name="interval"/>
+    </label></td></tr>
+    <tr><td>
+      <input type="submit" value="Wyślij"/>
+    </td></tr>
+  </table>
+  <div id="res">Formularz przesłany!</div>
+</form>

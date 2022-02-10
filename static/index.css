@@ -1,0 +1,136 @@
+body {
+  background-color: #FFCC58;
+}
+
+body * {
+  color: #FFFFFF;
+  font-family: sans-serif;
+  font-style: bold;
+}
+
+#main-flex, #main-flex-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+#main-flex {
+  flex-direction: row;
+  height: 98vh;
+  width: 98vw;
+}
+
+#main-flex-inner {
+  flex-direction: column;
+}
+
+.main-button, .no-button {
+  width: 10vw;
+  min-width: 155px;
+  height: 5vw;
+  min-height: 69px;
+  border-radius: 10%;
+  background-color: #ffa319;
+  border: none;
+  font-size: 20px;
+}
+
+.main-button:hover {
+  transform: scale(1.05);
+  transition: transform 0.25s;
+}
+
+.main-button:active {
+  transform: scale(1);
+  transition: transform 0.05s;
+}
+
+.signed-in-button {
+  transform: scale(1);
+  display: none;
+  gap: 1;
+}
+
+#reports-button {
+  transform: translateY(5vw);
+  gap: 5vw;
+}
+
+#upload-data-button {
+  transform: translateY(-5vw);
+  gap: 5vw;
+}
+
+#login-button {
+  z-index: 2;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#helper-icon {
+  border: 3px solid #FFB558;
+  border-radius: 100%;
+  aspect-ratio: 1;
+  height: 2em;
+  text-align: center;
+  font-size: 110%;
+  font-weight: bold;
+  line-height: 0.7;
+  background-color: #FFE09A;
+  color: #464646;
+}
+
+.no-button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay {
+  display: none;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#response {
+  display: none;
+  z-index: 20;
+  border-radius: 8%;
+  background-color: #FFB558;
+  padding: 1.5em;
+}
+
+#response * {
+  color: black;
+}
+
+#response input {
+  border: none;
+  background-color: #FFE09A;
+}
+
+#notification {
+  position: fixed;
+  top: 10px;
+}
+
+/*# sourceMappingURL=index.css.map */

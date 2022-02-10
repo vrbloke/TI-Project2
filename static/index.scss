@@ -1,0 +1,153 @@
+$bg-color: #FFCC58;
+$primary-color: #ffa319;
+$text-color: #FFFFFF;
+$main-font-stack: sans-serif;
+$main-font-style: bold;
+$response-bg-color: #FFB558;
+$response-button-color: #FFE09A;
+$response-text-color: black;
+
+body {
+  background-color: $bg-color;
+}
+
+body * {
+  color: $text-color;
+  font-family: $main-font-stack;
+  font-style: $main-font-style;
+}
+
+// outer flex containers to align main content to middle of page
+
+#main-flex, #main-flex-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+#main-flex {
+  flex-direction: row;
+  height: 98vh;
+  width: 98vw;
+}
+
+#main-flex-inner {
+  flex-direction: column;
+}
+
+// button magic!!
+
+.main-button, .no-button {
+  width: 10vw;
+  min-width: 155px;
+  height: 5vw;
+  min-height: 69px;
+  border-radius: 10%;
+  background-color: $primary-color;
+  border: none;
+  font-size: 20px;
+}
+
+.main-button:hover {
+  transform: scale(1.05);
+  transition: transform 0.25s;
+}
+
+.main-button:active {
+  transform: scale(1);
+  transition: transform 0.05s;
+}
+
+.signed-in-button {
+  transform: scale(1);
+  display: none;
+  gap: 1;
+}
+
+#reports-button {
+  transform: translateY(5vw);
+  gap: 5vw;
+}
+
+#upload-data-button {
+  transform: translateY(-5vw);
+  gap: 5vw;
+}
+
+#login-button {
+  z-index: 2;
+}
+
+// flex containers for buttons
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// helper
+
+#helper-icon {
+  border: 3px solid $response-bg-color;
+  border-radius: 100%;
+  aspect-ratio: 1;
+  height: 2em;
+  text-align: center;
+  font-size: 110%;
+  font-weight: bold;
+  line-height: 0.7;
+  background-color: $response-button-color;
+  color: rgb(70,70,70);
+}
+
+.no-button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// response
+
+#overlay {
+  display: none;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#response {
+  display: none;
+  z-index: 20;
+  border-radius: 8%;
+  background-color: $response-bg-color;
+  padding: 1.5em;
+}
+
+#response * {
+  color: $response-text-color;
+}
+
+#response input {
+  border: none;
+  background-color: $response-button-color;
+}
+
+#notification {
+  position: fixed;
+  top: 10px;
+}

@@ -1,0 +1,51 @@
+  <script src="{{url_for('static', filename='constants.js')}}"></script>
+  <script src="constants.js"></script>
+  <script src="{{url_for('static',filename='jquery-3.6.0.min.js')}}"></script>
+  <script src="jquery-3.6.0.min.js"></script>
+  <script>
+    function setLogin() {
+      $('#form').attr('action',homeUrl + '/login').trigger('submit');
+    }
+    function setRegister() {
+      const username = $('#form').find('[name=username]').val();
+      const password = $('#form').find('[name=password]').val();
+      $('#form').attr('action',homeUrl + '/register').trigger('submit');
+    }
+    function visibilitySwitched() {
+      const cbox = document.getElementById('checkbox');
+      const pinput = document.getElementById('pinput');
+      const shouldShow = cbox.checked;
+      console.log(shouldShow);
+      if(shouldShow) {
+        pinput.type = 'text';
+      }
+      else {
+        pinput.type = 'password';
+      }
+    }
+  </script>
+<form action="" id="form">
+  <table>
+    <tr><td><label>
+      Nazwa użytkownika<br/>
+      <input type="text" name="username" id="uinput"/>
+    </label></td></tr>
+    <tr><td><label>
+      Hasło<br/>
+      <input type="password" name="password" id="pinput"/>
+    </label></td>
+    <td>
+      <label>
+        <br/>
+        <input type="checkbox" name="passwordVisible" onchange="visibilitySwitched()" id="checkbox"/>
+        Pokaż hasło
+      </label>
+    </td>
+    </tr>
+    <tr><td>
+      <input type="submit" value="Zaloguj się" onclick="setLogin()"/>
+      <input type="submit" value="Zarejestruj się" onclick="setRegister()"/>
+    </td></tr>
+  </table>
+  <div id="res"></div>
+</form>

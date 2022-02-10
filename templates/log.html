@@ -1,0 +1,51 @@
+<script src="{{url_for('static', filename='constants.js')}}"></script>
+<script src="constants.js"></script>
+<script src="{{url_for('static',filename='jquery-3.6.0.min.js')}}"></script>
+<script src="jquery-3.6.0.min.js"></script>
+<script>
+  $(function () {
+    $('#res').css('opacity',0);
+    $('#form').on('submit',function(e){
+      e.preventDefault();
+      let name = $(this).find('[name=habit]').val();
+      let date = $(this).find('[name=startDate]').val();
+      console.log('Form data: ' + name + ', ' + date);
+      console.log(!name || !date);
+      if(!name || !date) {
+        $('#res').html('Wprowadź poprawne dane.').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
+        return false;
+      }
+      activities[activities.length] = {name: name, date: date};
+      $('#res').html('Formularz przesłany!').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
+      return false;
+    });
+
+    let html = $('#habit-select').html()
+    for (var i = 0; i < habits.length; i++) {
+      const habit = habits[i];
+      console.log(habit, habit['name']);
+      html += '<option value="' + habit['name'] + '">' + habit['name'] + '</option>'
+    }
+    $('#habit-select').html(html);
+  });
+</script>
+<form id="form" action="">
+  <table>
+    <tr><td><label>
+      Który zwyczaj kultywowałeś?<br/>
+      <select name="habit" id="habit-select">
+        {% for name in habits %}
+        <option value="{{name|e}}">{{name|e}}</option>
+        {% endfor %}
+      </select>
+    </label></td></tr>
+    <tr><td><label>
+      Kiedy?<br/>
+      <input type="date" name="startDate"/>
+    </label></td></tr>
+    <tr><td>
+      <input type="submit" value="Wyślij"/>
+    </td></tr>
+  </table>
+  <div id="res"></div>
+</form>

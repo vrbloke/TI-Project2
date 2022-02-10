@@ -1,0 +1,27 @@
+<style>
+  th {
+    font-weight: bold;
+  }
+  .green {
+    background-color: palegreen;
+  }
+  .red {
+   background-color: indianred;
+  }
+  td {
+    height: 1em;
+  }
+  .habit-name {
+    font-size: 120%;
+    font-weight: bold;
+  }
+</style>
+<div id="table-list">
+  {% for habit,summary in package %}
+  <span class="habit-name">{{habit}}</span>
+    <table>
+      <tr>{% for instance in summary[0] %}<th>{{instance}}</th>{% endfor %}</tr>
+      <tr>{% for upheld in summary[1] %}<td class="{% if upheld %}green{% else %}red{% endif %}"></td>{% endfor %}</tr>
+    </table>
+  {% endfor %}
+</div>

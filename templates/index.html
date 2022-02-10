@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tworzenie zwyczajów</title>
+    <script src="{{url_for('static', filename='constants.js')}}"></script>
+    <script src="{{url_for('static',filename='jquery-3.6.0.min.js')}}"></script>
+    <script src="{{url_for('static',filename='index.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='index.css')}}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dongle&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&family=Raleway:wght@200&display=swap" rel="stylesheet">
+    <!-- local development scripts: remove for final version -->
+    <!--
+    <script src="constants.js"></script>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css"/>
+    -->
+</head>
+<body>
+<div id="overlay"></div>
+<p id="notification"></p>
+<div id="main-flex">
+    <div id="main-flex-inner">
+        <div id="buttons">
+            <div id="columns-box" class="row">
+                <div id="col1" class="column">
+                    <button id="create-habit-button" class="main-button">Stwórz nowe przyzwyczajenie</button>
+                </div>
+                <div id="col2" class="column">
+                    <button id="reports-button" class="main-button signed-in-button">Wyświetl raporty</button>
+                    <button id="login-button" class="main-button">{% if loggedIn == 'True' %} Wyloguj się {% else %} Zaloguj się {% endif %}</button>
+                    <button id="upload-data-button" class="main-button signed-in-button">Wyślij lokalne dane</button>
+                </div>
+                <div id="col3" class="column">
+                    <div class="no-button"></div>
+                    <button id="log-activity-button" class="main-button">Zapisz aktywność</button>
+                    <div class="no-button"></div>
+                </div>
+            </div>
+        </div>
+        <div id="response">
+            <form>
+                <label>
+                    Text field
+                    <input type="text" value="Lorem ipsum"/>
+                </label>
+                <br/>
+                <label>
+                    Checkbox
+                    <input type="checkbox"/>
+                </label>
+                <br/>
+                <input type="button" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
