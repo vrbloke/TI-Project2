@@ -237,7 +237,6 @@ async function displayRawButtonClicked() {
     if(await isLoggedIn()) {
         html = `<p>Jesteś zalogowany. Wyświetlam dane online.</p>`
         $.get('/fullTables', (data, status, jqXHR) => {
-            console.log(data);
             html += `<p>Przyzwyczajenia</p>
             <table class="draw-borders"><tr><th>Nazwa</th><th>Data rozpoczęcia</th><th>Częstotliwość</th></tr>`
             data['habits'].forEach(habit => {
