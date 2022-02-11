@@ -1,7 +1,7 @@
 <script>
   $(function () {
     $('#res').css('opacity',0);
-    $('#form').on('submit',function(e){
+    $('#form').on('submit',async function(e){
       e.preventDefault();
       let name = $(this).find('[name=habit]').val();
       let date = $(this).find('[name=startDate]').val();
@@ -11,18 +11,40 @@
         $('#res').html('Wprowadź poprawne dane.').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
         return false;
       }
-      activities[activities.length] = {name: name, date: date};
+      if(!await isLoggedIn()) {
+        let tr = db.transaction(['activities'], 'readwrite');
+        let os = tr.objectStore('activities');
+        let req = os.add({name: name, date: date});
+        req.onsuccess = event => {
+          console.log('Success\n');
+          console.log(event);
+        }
+      }
+      else {
+            await $.post({
+              url: '/uploadLocalActivity',
+              data: {name: name, date: date},
+              success: function (data, e, x) {
+                console.log("Success");
+                displayNotification(data);
+              }
+            });
+      }
       $('#res').html('Formularz przesłany!').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
       return false;
     });
 
     let html = $('#habit-select').html()
-    for (var i = 0; i < habits.length; i++) {
-      const habit = habits[i];
-      console.log(habit, habit['name']);
-      html += '<option value="' + habit['name'] + '">' + habit['name'] + '</option>'
-    }
-    $('#habit-select').html(html);
+    let tr = db.transaction(['habits']);
+    let os = tr.objectStore('habits');
+    os.getAll().onsuccess = event => {
+      console.log('Local habits:');
+      console.log(event.target.result);
+      event.target.result.forEach(habit => {
+        html += '<option value="' + habit.name + '">' + habit.name + '</option>';
+      });
+      $('#habit-select').html(html);
+    };
   });
 </script>
 <form id="form" action="">

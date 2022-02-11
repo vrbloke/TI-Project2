@@ -31,7 +31,7 @@ def create():
 @app.route('/log')
 def log():
     islogged = isLoggedIn()
-    habits = [('not logged in')];
+    habits = [];
     if islogged:
         habits = sql_select(f"select name from habit where userID = '{fl.session['userID']}'")
     printerr(habits);
@@ -40,6 +40,24 @@ def log():
         sanitizedHabits.append(habit[0])
     printerr(sanitizedHabits)
     return fl.render_template('log.html', habits=sanitizedHabits);
+
+@app.route('/fullTables')
+def fullTables():
+    printerr('Full tables request')
+    habits = []
+    activities = []
+    habits = sql_select(f"""
+    select name, startDate, frequency from habit where userID = '{fl.session['userID']}'
+    """)
+    activities = sql_select(f"""
+    SELECT h.name, a.date FROM activity a JOIN habit h 
+    ON a.habitID = h.id 
+    WHERE h.userID = {fl.session['userID']}   
+    """)
+    printerr(habits)
+    printerr(activities)
+    dt = {'habits': habits, 'activities': activities}
+    return fl.jsonify(dt)
 
 
 @app.route('/loginForm')

@@ -1,11 +1,9 @@
   <script>
     function setLogin() {
-      $('#form').attr('action',homeUrl + '/login').trigger('submit');
+      $('#form').attr('action','/login').trigger('submit');
     }
     function setRegister() {
-      const username = $('#form').find('[name=username]').val();
-      const password = $('#form').find('[name=password]').val();
-      $('#form').attr('action',homeUrl + '/register').trigger('submit');
+      $('#form').attr('action','/register').trigger('submit');
     }
     function visibilitySwitched() {
       const cbox = document.getElementById('checkbox');

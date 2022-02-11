@@ -1,7 +1,7 @@
 <script>
-  $(function () {
+  $(async function () {
     $('#res').css('opacity',0);
-    $('#form').on('submit',function(e){
+    $('#form').on('submit',async function(e){
       e.preventDefault();
       let name = $(this).find('[name=name]').val();
       let startDate = $(this).find('[name=startDate]').val();
@@ -12,7 +12,22 @@
         $('#res').html('Wprowadź poprawne dane.').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
         return false;
       }
-      habits[habits.length] = {name: name, startDate: startDate, interval: interval};
+      if(!await isLoggedIn()) {
+        let tr = db.transaction(['habits'], 'readwrite');
+        let os = tr.objectStore('habits');
+        let req = os.add({name: name, startDate: startDate, interval: interval});
+        req.onsuccess = event => {
+          console.log('Success\n');
+          console.log(event);
+        }
+      }
+      else {
+          await $.post({
+            url:'/uploadLocalHabit',
+            data: {name: name, startDate: startDate, interval: interval},
+            success: function(data,e,x) { console.log("Success"); displayNotification(data); }
+          });
+      }
       $('#res').html('Formularz przesłany!').css('opacity',1).animate({ opacity: 0 },{duration: 1000});
       return false;
     });

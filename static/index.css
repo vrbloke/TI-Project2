@@ -48,7 +48,7 @@ body * {
 
 .signed-in-button {
   transform: scale(1);
-  display: none;
+  visibility: hidden;
   gap: 1;
 }
 
@@ -126,6 +126,14 @@ body * {
 #response input {
   border: none;
   background-color: #FFE09A;
+}
+
+.draw-borders {
+  border-collapse: collapse;
+}
+
+.draw-borders td, .draw-borders th {
+  border: 1px solid black;
 }
 
 #notification {
