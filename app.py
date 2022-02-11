@@ -83,9 +83,12 @@ def reports():
     for habit in habits:
         startDate = date.fromisoformat(habit[1])
         frequency = timedelta(habit[2])
+        name = habit[0]
+        printerr(f'Name: {name}, Start date: {startDate}, frequency: {frequency}')
         timeSinceStart = today - startDate
         printerr(f'habit started {timeSinceStart} ago')
         if timeSinceStart.days < 0:  # probably just skip
+            iterable.append(None)
             continue
 
         # 2. Determine the last 10 dates when the habit should be upheld.
@@ -94,6 +97,7 @@ def reports():
         printerr(f'Last instance: {timeSinceLast} days ago on {today - timeSinceLast}')
         last10Instances = [today - timeSinceLast]
         if last10Instances[-1] < startDate:  # probably just skip this habit, again
+            iterable.append(None)
             continue
         for i in range(10):
             instance = last10Instances[-1] - frequency
@@ -103,8 +107,8 @@ def reports():
 
         # 3. Determine whether the habit WAS upheld.
         wasUpheld = []
-        every = sql_select_c(conn, f'SELECT * FROM activity')
-        printerr(every)
+        #every = sql_select_c(conn, f'SELECT * FROM activity')
+        #printerr(every)
         for instance in last10Instances:
             printerr(f'Testing on {date.isoformat(instance)}')
             res = sql_select_c(conn,
@@ -113,10 +117,14 @@ def reports():
             wasUpheld.append(True if res else False)
         # 4. Collate results in iterables for template.
         habitSummary = (reversed(last10Instances), reversed(wasUpheld))
+        printerr(f"Final it: {habitSummary}")
         iterable.append(habitSummary)
     # iterable contains iterables. each is a list of tuples (instance, wasUpheld).
     habitNames = [habit[0] for habit in habits]
     package = zip(habitNames, iterable)
+    packageT = zip(habitNames, iterable)
+    for habit, it in packageT:
+        printerr(f'Content for {habit}: {it}')
     return fl.render_template('report.html', package=package)
 
 
@@ -133,7 +141,7 @@ def login():
     if (len(res) != 0):
         fl.session['userID'] = res[0][0]
         printerr(f'User {fl.session["userID"]} logged in!')
-        return fl.render_template('index.html', loggedIn=str(isLoggedIn()))
+        return fl.redirect(fl.url_for('index'))
     else:
         return fl.render_template_string("""
 			<html>
@@ -213,6 +221,11 @@ def uploadLocalHabit():
         conn.close()
         return ('Pominięto powtórzoną nazwę', 200)
 
+    try:
+        date.fromisoformat(fl.request.form["startDate"])
+    except ValueError:
+        return ('Zablokowano niedozwolone dane', 200)
+
     querystring = f"""insert into habit values 
 	({getNextID("habit")},
 	'{fl.request.form["name"]}',
@@ -247,6 +260,11 @@ def uploadLocalActivity():
         conn.commit()
         conn.close()
         return ('Ominięto powtórzoną czynność', 200)
+
+    try:
+        date.fromisoformat(fl.request.form["date"])
+    except ValueError:
+        return ('Zablokowano niedozwolone dane', 200)
 
     querystring = f"""insert into activity values 
 	({getNextID("activity")},

@@ -1,8 +1,12 @@
-$(function() {
+$(async function() {
     fixHiddenButtonAnimations();
     bindEvents();
-    animateButtons();
-    openDatabase();
+    await openDatabase();
+    if(await isLoggedIn()) {
+        await animateButtons();
+        await uploadLocalData();
+        //await deleteDatabaseIfLoggedIn();
+    }
 })
 
 var db = null;
@@ -21,23 +25,32 @@ function bindEvents() {
 }
 
 async function openDatabase() {
-    console.log('Opening database');
+    console.log('ENTERING openDatabase');
+    if(!db) { console.log('Db currently null -- opening'); } else if(!await isLoggedIn()) { return; }
     let req = window.indexedDB.open('db',2);
     req.onerror = event => { console.log(event); }
     req.onsuccess = async function(event) {
         console.log(event);
         db = event.target.result;
-        if(await isLoggedIn()) {
-            console.log('Attempt to upload local data');
-            await uploadLocalData();
-            window.indexedDB.deleteDatabase('db').onblocked = event => {console.log('Blocked!');};
-        }
     };
     req.onupgradeneeded = event => {
         db = event.target.result;
         db.createObjectStore('habits', { autoIncrement: true });
         db.createObjectStore('activities', { autoIncrement: true });
     };
+    console.log('EXITING openDatabase')
+}
+
+async function deleteDatabaseIfLoggedIn() {
+    console.log('ENTERING deleteDatabase');
+    let tr = db.transaction(['habits','activities'],'readwrite');
+    let osh = tr.objectStore('habits');
+    let osa = tr.objectStore('activities');
+    let reqh = osh.clear();
+    let reqa = osa.clear();
+    reqh.onsuccess = event => { console.log('Successfully deleted habits'); }
+    reqa.onsuccess = event => { console.log('Successfully deleted activities'); }
+    console.log('EXITING deleteDatabase');
 }
 
 function fixHiddenButtonAnimations() {
@@ -75,9 +88,6 @@ function fixHiddenButtonAnimations() {
 }
 
 async function animateButtons() {
-    if(!await isLoggedIn()) {
-        return;
-    }
     $('#reports-button').css('visibility','visible').animate(
         { gap: 0 },
         {
@@ -103,7 +113,6 @@ function displayGET(url) {
 async function isLoggedIn() {
     let result = 0;
     await $.get('/isLoggedIn', function(data, status, jqXHR) {
-        console.log(data);
         result = data['loggedIn'];
         userID = data['userID'];
     });
@@ -121,7 +130,6 @@ async function logout() {
         complete: function(data, status) {
             console.log('Logged out.');
             userID = null;
-            openDatabase();
             $('#login-button').html('Zaloguj się');
             $('#reports-button').animate(
                 { gap: 5 },
@@ -188,6 +196,7 @@ function logActivityButtonClicked() {
  * with a request
  */
 async function uploadLocalData() {
+    console.log('ENTERING uploadLocalData')
     db.transaction(['habits']).objectStore('habits').getAll().onsuccess = async function(event) {
         let habits = event.target.result;
         console.log('Habits!');
@@ -209,9 +218,11 @@ async function uploadLocalData() {
                     success: function(data,e,x) { console.log("Success"); displayNotification(data); }
                 });
             }
+            await deleteDatabaseIfLoggedIn();
         }
     };
     displayNotification('Przesłano lokalne dane!');
+    console.log('EXITING UploadLocalData');
 }
 
 

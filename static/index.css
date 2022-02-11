@@ -141,4 +141,16 @@ body * {
   top: 10px;
 }
 
+#response {
+  max-width: 70%;
+}
+
+table {
+  width: 100%;
+}
+
+p {
+  max-width: 100%;
+}
+
 /*# sourceMappingURL=index.css.map */

@@ -16,8 +16,11 @@
     font-weight: bold;
   }
 </style>
+<p>Planowałeś/aś wykonywać swoje nowe zwyczaje co daną ilość dni. W poniższej tabeli przedstawiono ostatnie 10 dat,
+w których zobowiązałeś się wykonywać nowe przyzwyczajenia. Jeśli nie minęło jeszcze 10 dat, pojawi się ich mniejsza
+ilość. Jeśli przyzwyczajenie jest tak nowe, że jeszcze nie było takich dat, przyzwyczajenie zostanie pominięte.</p>
 <div id="table-list">
-  {% for habit,summary in package %}
+  {% for habit,summary in package if summary %}
   <span class="habit-name">{{habit}}</span>
     <table>
       <tr>{% for instance in summary[0] %}<th>{{instance}}</th>{% endfor %}</tr>
